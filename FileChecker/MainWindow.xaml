@@ -22,11 +22,11 @@
                 <ColumnDefinition Width="5"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TreeView Name="_pathContent">
+            <TreeView Name="_pathContent" SelectedItemChanged="_pathContent_SelectedItemChanged">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:NodeInfo }" ItemsSource="{Binding Path=Children}">
                         <StackPanel Orientation="Horizontal">
-                            <ToggleButton Visibility="{Binding IsFile, Converter={StaticResource vcv}}" Content="+" Click="ToggleButton_Click"></ToggleButton>
+                            <!--<ToggleButton Visibility="{Binding IsFile, Converter={StaticResource vcv}}" Content="+" Click="ToggleButton_Click" ></ToggleButton>-->
                             <TextBlock VerticalAlignment="Center" Text="{Binding Name}"></TextBlock>
                         </StackPanel>
                     </HierarchicalDataTemplate>

@@ -35,7 +35,13 @@ namespace FileChecker
             var result = folderBrowserDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                this._pathContent.ItemsSource = LoadPathContent(folderBrowserDialog.SelectedPath);
+                _pathContent.ItemsSource = LoadPathContent(folderBrowserDialog.SelectedPath);
+                //var nodes = LoadPathContent(folderBrowserDialog.SelectedPath);
+                //nodes.ForEach(item => _pathContent.Items.Add(new TreeViewItem()
+                //{
+                //    DataContext = item,
+                //    Header = item.Name,
+                //}));
             }
         }
 
@@ -52,7 +58,8 @@ namespace FileChecker
             {
                 IsFile = false,
                 Fullpath = e.FullName,
-                Name = e.Name
+                Name = e.Name,
+                Children = LoadPathContent(e.FullName)
             }).ToList();
             var files = di.GetFiles().Select(e => new NodeInfo()
             {
@@ -69,6 +76,17 @@ namespace FileChecker
             var btn = (ToggleButton)sender;
             var nodeInfo = (NodeInfo)btn.DataContext;
             nodeInfo.Children = LoadPathContent(nodeInfo.Fullpath);
+            nodeInfo.Name = "aa";
+        }
+
+        private void _pathContent_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var context = (NodeInfo)e.NewValue;
+            if (context.IsFile)
+            {
+                var fi = new FileInfo(context.Fullpath);
+                System.Windows.MessageBox.Show($"文件名：{fi.Name}\n文件大小：{fi.Length}\n创建时间：{fi.CreationTime}");
+            }
         }
     }
 }
