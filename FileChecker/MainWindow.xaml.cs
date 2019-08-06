@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Windows.Controls.Primitives;
 
 namespace FileChecker
 {
@@ -34,7 +35,7 @@ namespace FileChecker
             var result = folderBrowserDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                LoadPathContent(folderBrowserDialog.SelectedPath);
+                this._pathContent.ItemsSource = LoadPathContent(folderBrowserDialog.SelectedPath);
             }
         }
 
@@ -43,9 +44,31 @@ namespace FileChecker
             this.Close();
         }
 
-        private void LoadPathContent(string path)
+        private List<NodeInfo> LoadPathContent(string path)
         {
-            
+            var di = new DirectoryInfo(path);
+            var subpaths = di.GetDirectories();
+            var nodes = subpaths.Select(e => new NodeInfo()
+            {
+                IsFile = false,
+                Fullpath = e.FullName,
+                Name = e.Name
+            }).ToList();
+            var files = di.GetFiles().Select(e => new NodeInfo()
+            {
+                Ext = e.Extension,
+                Name = e.Name,
+                Fullpath = e.FullName,
+                IsFile = true
+            }).ToList();
+            return nodes.Concat(files).ToList();
+        }
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (ToggleButton)sender;
+            var nodeInfo = (NodeInfo)btn.DataContext;
+            nodeInfo.Children = LoadPathContent(nodeInfo.Fullpath);
         }
     }
 }

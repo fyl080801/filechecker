@@ -28,6 +28,7 @@ namespace FileChecker
                 }
                 return _children;
             }
+            set { _children = value; }
         }
     }
 }
