@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs/FileChecker/v16
+/FileChecker/bin/Debug
+/FileChecker/obj/Debug
